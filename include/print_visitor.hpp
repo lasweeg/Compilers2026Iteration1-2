@@ -29,12 +29,12 @@ struct PrintVisitor : Visitor {
     }
 
 
-    void visit(makeProgram* node) {
+    void visit(program* node) {
         printIndent();
-        output << "makeProgram\n";
+        output << "program\n";
 
         depth++;
-        node->programStatements->accept(this);
+        node->programStatements.accept(this);
         depth--;
     }
 
@@ -110,14 +110,14 @@ struct PrintVisitor : Visitor {
         output << "trueStatements\n";
 
         depth++;
-        node->trueStatements->accept(this);
+        node->trueStatements.accept(this);
         depth--;
 
         printIndent();
         output << "falseStatements\n";
 
         depth++;
-        node->falseStatements->accept(this);
+        node->falseStatements.accept(this);
         depth--;
 
         depth--;
