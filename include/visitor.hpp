@@ -1,28 +1,29 @@
 #pragma once
 
-struct program;
-struct statements;
+class program;
+class statements;
 
-struct expressionStatement;
-struct intdeclareStatement;
-struct assignmentStatement;
-struct printStatement;
+class expressionStatement;
+class intdeclareStatement;
+class assignmentStatement;
+class printStatement;
 
-struct ifElseExpression;
-struct declareInteger;
-struct assignValue;
-struct compareValues;
-struct printValue;
+class ifElseExpression;
+class declareInteger;
+class assignValue;
+class compareValues;
+class printValue;
 
-struct integerValue;
-struct variableValue;
-struct addValues;
-struct subtractValues;
-struct multiplyValues;
-struct divideValues;
+class integerValue;
+class variableValue;
+class addValues;
+class subtractValues;
+class multiplyValues;
+class divideValues;
 
 
-struct Visitor {
+class Visitor {
+public:
     virtual ~Visitor() = default;
 
     virtual void visit(program* node) = 0;
