@@ -1,0 +1,16 @@
+main {
+    declare x int
+    declare y int
+
+    x = 2 + 3 * 4
+    y = (x - 2 * (x - 4)) / 3
+
+    print(x)
+    print(y + 1)
+
+    if (x == 14) {
+        print(x + y)
+    } else {
+        print(0)
+    }
+}
