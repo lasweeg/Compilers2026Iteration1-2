@@ -40,8 +40,8 @@ struct Interpreter : Visitor {
     }
 
 
-    void visit(makeProgram* node) {
-        node->programStatements->accept(this);
+    void visit(program* node) {
+        node->programStatements.accept(this);
     }
 
 
@@ -78,9 +78,9 @@ struct Interpreter : Visitor {
         conditionalDepth++;
 
         if (comparisonResult) {
-            node->trueStatements->accept(this);
+            node->trueStatements.accept(this);
         } else {
-            node->falseStatements->accept(this);
+            node->falseStatements.accept(this);
         }
 
         conditionalDepth--;
