@@ -8,48 +8,51 @@
 #include "visitor.hpp"
 
 
-struct program {
-    virtual ~program() = default;
+class statement {
+public:
+    virtual ~statement() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
-struct statement {
-    virtual ~statement() = default;
+class expression {
+public:
+    virtual ~expression() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
-struct expression {
-    virtual ~expression() = default;
+class intdeclare {
+public:
+    virtual ~intdeclare() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
-struct intdeclare {
-    virtual ~intdeclare() = default;
+class assignment {
+public:
+    virtual ~assignment() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
-struct assignment {
-    virtual ~assignment() = default;
+class comparison {
+public:
+    virtual ~comparison() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
-struct comparison {
-    virtual ~comparison() = default;
+class print {
+public:
+    virtual ~print() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
-struct print {
-    virtual ~print() = default;
-    virtual void accept(Visitor* visitor) = 0;
-};
-
-struct arithmeticExpression {
-    virtual ~arithmeticExpression() = default;
+class arithmeticExpression {
+public:
+    virtual ~arithmeticExpression() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 
-struct statements {
+class statements {
+public:
     std::vector<std::unique_ptr<statement>> values;
 
     void add(std::unique_ptr<statement> value) {
@@ -62,12 +65,9 @@ struct statements {
 };
 
 
-struct makeProgram : program {
-    std::unique_ptr<statements> programStatements;
-
-    makeProgram(std::unique_ptr<statements> allStatements) :
-        programStatements(std::move(allStatements))
-    {}
+class program {
+public:
+    statements programStatements;
 
     void accept(Visitor* visitor) {
         visitor->visit(this);
@@ -75,7 +75,8 @@ struct makeProgram : program {
 };
 
 
-struct expressionStatement : statement {
+class expressionStatement : public statement {
+public:
     std::unique_ptr<expression> value;
 
     expressionStatement(std::unique_ptr<expression> newValue) :
@@ -88,7 +89,8 @@ struct expressionStatement : statement {
 };
 
 
-struct intdeclareStatement : statement {
+class intdeclareStatement : public statement {
+public:
     std::unique_ptr<intdeclare> value;
 
     intdeclareStatement(std::unique_ptr<intdeclare> newValue) :
@@ -101,7 +103,8 @@ struct intdeclareStatement : statement {
 };
 
 
-struct assignmentStatement : statement {
+class assignmentStatement : public statement {
+public:
     std::unique_ptr<assignment> value;
 
     assignmentStatement(std::unique_ptr<assignment> newValue) :
@@ -114,7 +117,8 @@ struct assignmentStatement : statement {
 };
 
 
-struct printStatement : statement {
+class printStatement : public statement {
+public:
     std::unique_ptr<print> value;
 
     printStatement(std::unique_ptr<print> newValue) :
@@ -127,15 +131,16 @@ struct printStatement : statement {
 };
 
 
-struct ifElseExpression : expression {
+class ifElseExpression : public expression {
+public:
     std::unique_ptr<comparison> condition;
-    std::unique_ptr<statements> trueStatements;
-    std::unique_ptr<statements> falseStatements;
+    statements trueStatements;
+    statements falseStatements;
 
     ifElseExpression(
         std::unique_ptr<comparison> newCondition,
-        std::unique_ptr<statements> newTrueStatements,
-        std::unique_ptr<statements> newFalseStatements
+        statements newTrueStatements,
+        statements newFalseStatements
     ) :
         condition(std::move(newCondition)),
         trueStatements(std::move(newTrueStatements)),
@@ -148,7 +153,8 @@ struct ifElseExpression : expression {
 };
 
 
-struct declareInteger : intdeclare {
+class declareInteger : public intdeclare {
+public:
     std::string variableName;
 
     declareInteger(std::string newVariableName) :
@@ -161,7 +167,8 @@ struct declareInteger : intdeclare {
 };
 
 
-struct assignValue : assignment {
+class assignValue : public assignment {
+public:
     std::string variableName;
     std::unique_ptr<arithmeticExpression> value;
 
@@ -179,7 +186,8 @@ struct assignValue : assignment {
 };
 
 
-struct compareValues : comparison {
+class compareValues : public comparison {
+public:
     std::unique_ptr<arithmeticExpression> leftValue;
     std::unique_ptr<arithmeticExpression> rightValue;
 
@@ -197,7 +205,8 @@ struct compareValues : comparison {
 };
 
 
-struct printValue : print {
+class printValue : public print {
+public:
     std::unique_ptr<arithmeticExpression> value;
 
     printValue(std::unique_ptr<arithmeticExpression> newValue) :
@@ -210,7 +219,8 @@ struct printValue : print {
 };
 
 
-struct integerValue : arithmeticExpression {
+class integerValue : public arithmeticExpression {
+public:
     int value;
 
     integerValue(int newValue) :
@@ -223,7 +233,8 @@ struct integerValue : arithmeticExpression {
 };
 
 
-struct variableValue : arithmeticExpression {
+class variableValue : public arithmeticExpression {
+public:
     std::string variableName;
 
     variableValue(std::string newVariableName) :
@@ -236,7 +247,8 @@ struct variableValue : arithmeticExpression {
 };
 
 
-struct addValues : arithmeticExpression {
+class addValues : public arithmeticExpression {
+public:
     std::unique_ptr<arithmeticExpression> leftValue;
     std::unique_ptr<arithmeticExpression> rightValue;
 
@@ -254,7 +266,8 @@ struct addValues : arithmeticExpression {
 };
 
 
-struct subtractValues : arithmeticExpression {
+class subtractValues : public arithmeticExpression {
+public:
     std::unique_ptr<arithmeticExpression> leftValue;
     std::unique_ptr<arithmeticExpression> rightValue;
 
@@ -272,7 +285,8 @@ struct subtractValues : arithmeticExpression {
 };
 
 
-struct multiplyValues : arithmeticExpression {
+class multiplyValues : public arithmeticExpression {
+public:
     std::unique_ptr<arithmeticExpression> leftValue;
     std::unique_ptr<arithmeticExpression> rightValue;
 
@@ -290,7 +304,8 @@ struct multiplyValues : arithmeticExpression {
 };
 
 
-struct divideValues : arithmeticExpression {
+class divideValues : public arithmeticExpression {
+public:
     std::unique_ptr<arithmeticExpression> leftValue;
     std::unique_ptr<arithmeticExpression> rightValue;
 

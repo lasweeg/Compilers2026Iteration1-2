@@ -1,5 +1,4 @@
 #include <iostream>
-#include <memory>
 #include <stdexcept>
 #include <string>
 
@@ -16,7 +15,7 @@ void yy::parser::error(const std::string& message)
 
 int main()
 {
-    std::unique_ptr<program> root;
+    program root;
     int result = 0;
 
     try {
@@ -32,19 +31,14 @@ int main()
         return result;
     }
 
-    if (root == nullptr) {
-        std::cerr << "Parser error: AST was not created\n";
-        return 1;
-    }
-
     std::cout << "AST successfully created\n";
 
     try {
         PrintVisitor printVisitor("build/ast.txt");
-        root->accept(&printVisitor);
+        root.accept(&printVisitor);
 
         Interpreter interpreter;
-        root->accept(&interpreter);
+        root.accept(&interpreter);
     }
     catch (const std::runtime_error& error) {
         std::cerr << "Interpreter error: " << error.what() << '\n';

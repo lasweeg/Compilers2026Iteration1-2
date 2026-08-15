@@ -8,10 +8,19 @@
 #include "ast.hpp"
 
 
-struct PrintVisitor : Visitor {
+class PrintVisitor : public Visitor {
     std::ofstream output;
     int depth;
 
+
+    void printIndent() {
+        for (int i = 0; i < depth; i++) {
+            output << "  ";
+        }
+    }
+
+
+public:
     PrintVisitor(const std::string& fileName) :
         output(fileName),
         depth(0)
@@ -22,19 +31,12 @@ struct PrintVisitor : Visitor {
     }
 
 
-    void printIndent() {
-        for (int i = 0; i < depth; i++) {
-            output << "  ";
-        }
-    }
-
-
-    void visit(makeProgram* node) {
+    void visit(program* node) {
         printIndent();
-        output << "makeProgram\n";
+        output << "program\n";
 
         depth++;
-        node->programStatements->accept(this);
+        node->programStatements.accept(this);
         depth--;
     }
 
@@ -110,14 +112,14 @@ struct PrintVisitor : Visitor {
         output << "trueStatements\n";
 
         depth++;
-        node->trueStatements->accept(this);
+        node->trueStatements.accept(this);
         depth--;
 
         printIndent();
         output << "falseStatements\n";
 
         depth++;
-        node->falseStatements->accept(this);
+        node->falseStatements.accept(this);
         depth--;
 
         depth--;

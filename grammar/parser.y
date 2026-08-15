@@ -1,7 +1,7 @@
 %language "c++"
 %define api.value.type variant
 %define api.token.constructor
-%parse-param { std::unique_ptr<program>& root }
+%parse-param { program& root }
 
 %code requires {
     #include <memory>
@@ -35,8 +35,7 @@
 %left PLUS MINUS
 %left MULTIPLY DIVIDE
 
-%type <std::unique_ptr<program>> program
-%type <std::unique_ptr<statements>> statements
+%type <statements> statements
 %type <std::unique_ptr<statement>> statement
 %type <std::unique_ptr<expression>> expression
 %type <std::unique_ptr<intdeclare>> intdeclare
@@ -45,33 +44,26 @@
 %type <std::unique_ptr<print>> print
 %type <std::unique_ptr<arithmeticExpression>> arithmetic
 
-%start input
+%start program
 
 %%
-
-input:
-    program
-    {
-        root = std::move($1);
-    }
-;
 
 program:
     MAIN LBRACE statements RBRACE
     {
-        $$ = std::make_unique<makeProgram>(std::move($3));
+        root.programStatements = std::move($3);
     }
 ;
 
 statements:
     %empty
     {
-        $$ = std::make_unique<struct statements>();
+        $$ = ::statements();
     }
     |
     statements statement
     {
-        $1->add(std::move($2));
+        $1.add(std::move($2));
         $$ = std::move($1);
     }
 ;
