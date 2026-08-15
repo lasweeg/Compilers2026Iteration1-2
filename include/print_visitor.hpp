@@ -8,23 +8,25 @@
 #include "ast.hpp"
 
 
-struct PrintVisitor : Visitor {
+class PrintVisitor : public Visitor {
     std::ofstream output;
     int depth;
 
+
+    void printIndent() {
+        for (int i = 0; i < depth; i++) {
+            output << "  ";
+        }
+    }
+
+
+public:
     PrintVisitor(const std::string& fileName) :
         output(fileName),
         depth(0)
     {
         if (!output) {
             throw std::runtime_error("Cannot open AST output file: " + fileName);
-        }
-    }
-
-
-    void printIndent() {
-        for (int i = 0; i < depth; i++) {
-            output << "  ";
         }
     }
 
