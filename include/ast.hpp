@@ -8,43 +8,38 @@
 #include "visitor.hpp"
 
 
-struct program {
-    virtual ~program() = default;
-    virtual void accept(Visitor* visitor) = 0;
-};
-
 struct statement {
-    virtual ~statement() = default;
+    virtual ~statement() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 struct expression {
-    virtual ~expression() = default;
+    virtual ~expression() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 struct intdeclare {
-    virtual ~intdeclare() = default;
+    virtual ~intdeclare() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 struct assignment {
-    virtual ~assignment() = default;
+    virtual ~assignment() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 struct comparison {
-    virtual ~comparison() = default;
+    virtual ~comparison() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 struct print {
-    virtual ~print() = default;
+    virtual ~print() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
 struct arithmeticExpression {
-    virtual ~arithmeticExpression() = default;
+    virtual ~arithmeticExpression() {}
     virtual void accept(Visitor* visitor) = 0;
 };
 
@@ -62,12 +57,8 @@ struct statements {
 };
 
 
-struct makeProgram : program {
-    std::unique_ptr<statements> programStatements;
-
-    makeProgram(std::unique_ptr<statements> allStatements) :
-        programStatements(std::move(allStatements))
-    {}
+struct program {
+    statements programStatements;
 
     void accept(Visitor* visitor) {
         visitor->visit(this);
@@ -129,13 +120,13 @@ struct printStatement : statement {
 
 struct ifElseExpression : expression {
     std::unique_ptr<comparison> condition;
-    std::unique_ptr<statements> trueStatements;
-    std::unique_ptr<statements> falseStatements;
+    statements trueStatements;
+    statements falseStatements;
 
     ifElseExpression(
         std::unique_ptr<comparison> newCondition,
-        std::unique_ptr<statements> newTrueStatements,
-        std::unique_ptr<statements> newFalseStatements
+        statements newTrueStatements,
+        statements newFalseStatements
     ) :
         condition(std::move(newCondition)),
         trueStatements(std::move(newTrueStatements)),
