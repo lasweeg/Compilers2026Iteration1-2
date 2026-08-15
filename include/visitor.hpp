@@ -1,6 +1,6 @@
 #pragma once
 
-struct makeProgram;
+struct program;
 struct statements;
 
 struct expressionStatement;
@@ -25,7 +25,7 @@ struct divideValues;
 struct Visitor {
     virtual ~Visitor() = default;
 
-    virtual void visit(makeProgram* node) = 0;
+    virtual void visit(program* node) = 0;
     virtual void visit(statements* node) = 0;
 
     virtual void visit(expressionStatement* node) = 0;
