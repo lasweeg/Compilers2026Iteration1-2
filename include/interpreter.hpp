@@ -9,17 +9,11 @@
 #include "ast.hpp"
 
 
-struct Interpreter : Visitor {
+class Interpreter : public Visitor {
     std::map<std::string, int> variables;
     bool comparisonResult;
     int arithmeticResult;
     int conditionalDepth;
-
-    Interpreter() :
-        comparisonResult(false),
-        arithmeticResult(0),
-        conditionalDepth(0)
-    {}
 
 
     int getVariable(const std::string& name) {
@@ -38,6 +32,14 @@ struct Interpreter : Visitor {
 
         variables[name] = value;
     }
+
+
+public:
+    Interpreter() :
+        comparisonResult(false),
+        arithmeticResult(0),
+        conditionalDepth(0)
+    {}
 
 
     void visit(program* node) {
